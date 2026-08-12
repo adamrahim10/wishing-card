@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kad Ucapan</title>
+    <!-- Tailwind CSS untuk gaya asas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS Khusus untuk Bentuk Sampul dan Animasi */
+        .scene {
+            perspective: 1000px;
+            margin-top: 250px; 
+        }
+        
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+        }
+        
+        /* Bahagian belakang sampul */
+        .envelope-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f43f5e; /* Rose-500 */
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* WRAPPER SURAT - Mengawal pergerakan naik dan membesar */
+        .letter-wrapper {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            height: 180px;
+            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            perspective: 1000px; /* Penting untuk kesan 3D surat */
+        }
+
+        .is-open .letter-wrapper {
+            transform: translateY(-220px) scale(1.6);
+            z-index: 10; 
+        }
+
+        /* BAHAGIAN DALAM SURAT - Mengawal pusingan (flip) */
+        .letter-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d; /* Mengekalkan kesan 3D depan/belakang */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .is-open .letter-inner {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        /* Kelas apabila butang pusing ditekan */
+        .letter-inner.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* Muka DEPAN dan BELAKANG surat */
+        .letter-front, .letter-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Sembunyikan muka yang menghadap belakang */
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            overflow-y: auto; /* Kekalkan kebolehan skrol jika teks panjang */
+            text-align: center;
+        }
+
+        /* Muka Belakang dipusingkan 180 darjah dari awal */
+        .letter-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Sayap-sayap sampul (Sama macam sebelum ini) */
+        .envelope-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
+            border-left: 150px solid #be123c;
+            z-index: 3;
+            border-bottom-left-radius: 8px;
+        }
+        
+        .envelope-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
+            border-right: 150px solid #be123c;
+            z-index: 3;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #e11d48;
+            z-index: 4;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 120px solid #fb7185;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out, z-index 0.5s;
+            z-index: 5;
+        }
+
+        .is-open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1; 
+        }
+
+        /* Custom Scrollbar supaya nampak lebih kemas */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px;}
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-rose-50 min-h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
+
+    <div class="scene mb-12">
+        <div id="envelope" class="envelope-wrapper">
+            <div class="envelope-back"></div>
+            
+            <!-- SURAT DENGAN MUKA DEPAN & BELAKANG -->
+            <div class="letter-wrapper">
+                <div class="letter-inner" id="letterInner">
+                    
+                    <!-- MUKA DEPAN -->
+                    <div class="letter-front">
+                        <h1 class="text-xl font-bold text-rose-600 mb-2">Terima Kasih!</h1>
+                        <p class="text-gray-600 text-xs leading-relaxed mb-4">
+                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                        </p>
+                        <!-- Butang untuk pusing ke belakang -->
+                        <button onclick="flipLetter()" class="mt-auto px-4 py-1 bg-rose-100 text-rose-600 text-xs font-semibold rounded-full hover:bg-rose-200 transition">
+                            Baca Belakang
+                        </button>
+                    </div>
+
+                    <!-- MUKA BELAKANG -->
+                    <div class="letter-back">
+                        <h1 class="text-xl font-bold text-rose-600 mb-2"></h1>
+                        <p class="text-gray-600 text-xs leading-relaxed mb-4">
+                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                        </p>
+                        <!-- Butang untuk pusing ke depan -->
+                        <button onclick="flipLetter()" class="mt-auto px-4 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition">
+                            Kembali
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="envelope-left"></div>
+            <div class="envelope-right"></div>
+            <div class="envelope-bottom"></div>
+            <div class="envelope-flap"></div>
+        </div>
+    </div>
+
+    <!-- Butang Kawalan Sampul -->
+    <button id="toggleBtn" class="px-8 py-3 bg-rose-500 text-white font-semibold rounded-full shadow-lg hover:bg-rose-600 transform hover:scale-105 transition duration-300 mt-10 z-20">
+        Buka Sampul
+    </button>
+
+    <script>
+        const toggleBtn = document.getElementById('toggleBtn');
+        const envelope = document.getElementById('envelope');
+        const letterInner = document.getElementById('letterInner');
+
+        // Fungsi Buka/Tutup Sampul
+        toggleBtn.addEventListener('click', () => {
+            envelope.classList.toggle('is-open');
+            
+            if (envelope.classList.contains('is-open')) {
+                toggleBtn.textContent = 'Tutup Sampul';
+                toggleBtn.classList.replace('bg-rose-500', 'bg-gray-500');
+                toggleBtn.classList.replace('hover:bg-rose-600', 'hover:bg-gray-600');
+            } else {
+                toggleBtn.textContent = 'Buka Sampul';
+                toggleBtn.classList.replace('bg-gray-500', 'bg-rose-500');
+                toggleBtn.classList.replace('hover:bg-gray-600', 'hover:bg-rose-600');
+                
+                // Reset surat ke muka depan apabila sampul ditutup
+                setTimeout(() => {
+                    letterInner.classList.remove('is-flipped');
+                }, 400); // delay sikit bagi animasi nampak natural
+            }
+        });
+
+        // Fungsi Pusing Surat (Flip)
+        function flipLetter() {
+            letterInner.classList.toggle('is-flipped');
+        }
+    </script>
+
+</body>
+</html>
