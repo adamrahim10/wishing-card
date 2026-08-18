@@ -7,7 +7,7 @@
     <!-- Tailwind CSS untuk gaya asas -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* CSS Khusus untuk Bentuk Sampul dan Animasi */
+        
         .scene {
             perspective: 1000px;
             margin-top: 250px; 
@@ -19,19 +19,19 @@
             height: 200px;
         }
         
-        /* Bahagian belakang sampul */
+      
         .envelope-back {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #f43f5e; /* Rose-500 */
+            background-color: #f43f5e; 
             border-radius: 8px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
         
-        /* WRAPPER SURAT - Mengawal pergerakan naik dan membesar */
+        
         .letter-wrapper {
             position: absolute;
             bottom: 10px;
@@ -40,7 +40,7 @@
             height: 180px;
             z-index: 2;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            perspective: 1000px; /* Penting untuk kesan 3D surat */
+            perspective: 1000px; 
         }
 
         .is-open .letter-wrapper {
@@ -48,13 +48,13 @@
             z-index: 10; 
         }
 
-        /* BAHAGIAN DALAM SURAT - Mengawal pusingan (flip) */
+        
         .letter-inner {
             position: relative;
             width: 100%;
             height: 100%;
             transition: transform 0.6s;
-            transform-style: preserve-3d; /* Mengekalkan kesan 3D depan/belakang */
+            transform-style: preserve-3d; 
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
@@ -63,17 +63,17 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.25);
         }
 
-        /* Kelas apabila butang pusing ditekan */
+        
         .letter-inner.is-flipped {
             transform: rotateY(180deg);
         }
 
-        /* Muka DEPAN dan BELAKANG surat */
+        
         .letter-front, .letter-back {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden; /* Sembunyikan muka yang menghadap belakang */
+            backface-visibility: hidden; 
             background-color: #ffffff;
             border-radius: 8px;
             padding: 20px;
@@ -81,16 +81,14 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            overflow-y: auto; /* Kekalkan kebolehan skrol jika teks panjang */
+            overflow-y: auto; 
             text-align: center;
         }
 
-        /* Muka Belakang dipusingkan 180 darjah dari awal */
         .letter-back {
             transform: rotateY(180deg);
         }
 
-        /* Sayap-sayap sampul (Sama macam sebelum ini) */
         .envelope-left {
             position: absolute;
             bottom: 0;
@@ -150,11 +148,25 @@
             z-index: 1; 
         }
 
-        /* Custom Scrollbar supaya nampak lebih kemas */
+        
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px;}
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        @media (max-width: 500px){
+            .scene{
+                margin-top: 180px;
+            }
+
+            .envelope-wrapper{
+                transform: scale(0.95);
+            }
+
+            .is-open .letter-wrapper{
+                transform: translateY(-200px) scale(1.5);
+            }
+        }
     </style>
 </head>
 <body class="bg-rose-50 min-h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
@@ -173,11 +185,14 @@
                         <p class="text-gray-600 text-xs leading-relaxed mb-4">
                             Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
                         </p>
-                        <!-- Butang untuk pusing ke belakang -->
+                        <!-- Butang untuk pusing ke belakang 
                         <button onclick="flipLetter()" class="mt-auto px-4 py-1 bg-rose-100 text-rose-600 text-xs font-semibold rounded-full hover:bg-rose-200 transition">
                             Baca Belakang
-                        </button>
+                        </button>-->
+                        
                     </div>
+
+                    <!-- dah tak pakai-->
 
                     <!-- MUKA BELAKANG -->
                     <div class="letter-back">
