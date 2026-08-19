@@ -13,24 +13,62 @@
             margin-top: 250px; 
         }
         
-        .envelope-wrapper {
-            position: relative;
-            width: 300px;
-            height: 200px;
-        }
         
-      
-        .envelope-back {
+        .wrapper {
+            height: 200px;
+            width: 300px;
+            background-color: #3760C9; 
+            position: relative;
+            display: flex;
+            justify-content: center;
+            z-index: 0;
+        }
+
+        
+        .lid {
             position: absolute;
+            height: 100%;
+            width: 100%;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f43f5e; 
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid transparent;
+            border-left: 150px solid transparent;
+            transform-origin: top;
+            transition: transform 0.25s linear;
         }
+
         
+        .lid.one {
+            border-top: 100px solid #658ced;
+            transform: rotateX(0deg);
+            z-index: 4; 
+            transition-delay: 0.75s;
+        }
+
+        
+        .lid.two {
+            border-top: 100px solid #3760C9;
+            transform: rotateX(90deg);
+            z-index: 1;
+            transition-delay: 0.5s;
+        }
+
+        
+        .envelope-body {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            border-top: 100px solid transparent;
+            border-right: 150px solid #C4DFF0;
+            border-bottom: 100px solid #C4DFF0;
+            border-left: 150px solid #a4d4f2;
+            z-index: 3;
+            pointer-events: none; 
+        }
+
         
         .letter-wrapper {
             position: absolute;
@@ -39,16 +77,11 @@
             right: 10px;
             height: 180px;
             z-index: 2;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s;
+            transition-delay: 0s; 
             perspective: 1000px; 
         }
 
-        .is-open .letter-wrapper {
-            transform: translateY(-220px) scale(1.6);
-            z-index: 10; 
-        }
-
-        
         .letter-inner {
             position: relative;
             width: 100%;
@@ -63,12 +96,10 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.25);
         }
 
-        
         .letter-inner.is-flipped {
             transform: rotateY(180deg);
         }
 
-        
         .letter-front, .letter-back {
             position: absolute;
             width: 100%;
@@ -89,81 +120,36 @@
             transform: rotateY(180deg);
         }
 
-        .envelope-left {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-top: 100px solid transparent;
-            border-bottom: 100px solid transparent;
-            border-left: 150px solid #be123c;
-            z-index: 3;
-            border-bottom-left-radius: 8px;
-        }
+
         
-        .envelope-right {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-top: 100px solid transparent;
-            border-bottom: 100px solid transparent;
-            border-right: 150px solid #be123c;
-            z-index: 3;
-            border-bottom-right-radius: 8px;
-        }
-        
-        .envelope-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-bottom: 100px solid #e11d48;
-            z-index: 4;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-        
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 120px solid #fb7185;
-            transform-origin: top;
-            transition: transform 0.5s ease-in-out, z-index 0.5s;
-            z-index: 5;
+        .wrapper.is-open .lid.one {
+            transform: rotateX(90deg);
+            transition-delay: 0s;
         }
 
-        .is-open .envelope-flap {
+        .wrapper.is-open .lid.two {
             transform: rotateX(180deg);
-            z-index: 1; 
+            transition-delay: 0.25s;
         }
 
-        
+        .wrapper.is-open .letter-wrapper {
+            transform: translateY(-220px) scale(1.6);
+            z-index: 10; 
+            transition-delay: 0.5s; 
+        }
+
+
+  
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px;}
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+        
         @media (max-width: 500px){
-            .scene{
-                margin-top: 160px;
-            }
-
-            .envelope-wrapper{
-                transform: scale(0.9);
-            }
-
-            .is-open .letter-wrapper{
+            .scene{ margin-top: 160px; }
+            .wrapper{ transform: scale(0.9); }
+            .wrapper.is-open .letter-wrapper{
                 transform: translateY(-180px) scale(1.1);
             }
         }
@@ -172,10 +158,14 @@
 <body class="bg-rose-50 min-h-screen flex flex-col items-center justify-center font-sans overflow-hidden">
 
     <div class="scene mb-12">
-        <div id="envelope" class="envelope-wrapper">
-            <div class="envelope-back"></div>
+        <div id="envelope" class="wrapper">
             
-            <!-- SURAT DENGAN MUKA DEPAN & BELAKANG -->
+            <!-- STRUKTUR SAMPUL BIRU (BAHARU) -->
+            <div class="lid one"></div>
+            <div class="lid two"></div>
+            <div class="envelope-body"></div>
+            
+            <!-- SURAT -->
             <div class="letter-wrapper">
                 <div class="letter-inner" id="letterInner">
                     
@@ -183,40 +173,33 @@
                     <div class="letter-front">
                         <h1 class="text-xl font-bold text-rose-600 mb-2">Terima Kasih!</h1>
                         <p class="text-gray-600 text-xs leading-relaxed mb-4">
-                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. 
                         </p>
-                        <!-- Butang untuk pusing ke belakang 
+                        <!---
                         <button onclick="flipLetter()" class="mt-auto px-4 py-1 bg-rose-100 text-rose-600 text-xs font-semibold rounded-full hover:bg-rose-200 transition">
                             Baca Belakang
-                        </button>-->
-                        
+                        </button>
+                    -->
                     </div>
 
-                    <!-- dah tak pakai-->
-
-                    <!-- MUKA BELAKANG -->
+                    <!-- MUKA BELAKANG 
                     <div class="letter-back">
                         <h1 class="text-xl font-bold text-rose-600 mb-2"></h1>
                         <p class="text-gray-600 text-xs leading-relaxed mb-4">
-                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                            Ini adalah muka belakang surat.
                         </p>
-                        <!-- Butang untuk pusing ke depan -->
                         <button onclick="flipLetter()" class="mt-auto px-4 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition">
                             Kembali
                         </button>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
             
-            <div class="envelope-left"></div>
-            <div class="envelope-right"></div>
-            <div class="envelope-bottom"></div>
-            <div class="envelope-flap"></div>
         </div>
     </div>
 
-    <!-- Butang Kawalan Sampul -->
+    
     <button id="toggleBtn" class="px-8 py-3 bg-rose-500 text-white font-semibold rounded-full shadow-lg hover:bg-rose-600 transform hover:scale-105 transition duration-300 mt-10 z-20">
         Buka Sampul
     </button>
@@ -226,7 +209,6 @@
         const envelope = document.getElementById('envelope');
         const letterInner = document.getElementById('letterInner');
 
-        // Fungsi Buka/Tutup Sampul
         toggleBtn.addEventListener('click', () => {
             envelope.classList.toggle('is-open');
             
@@ -239,14 +221,12 @@
                 toggleBtn.classList.replace('bg-gray-500', 'bg-rose-500');
                 toggleBtn.classList.replace('hover:bg-gray-600', 'hover:bg-rose-600');
                 
-                // Reset surat ke muka depan apabila sampul ditutup
                 setTimeout(() => {
                     letterInner.classList.remove('is-flipped');
-                }, 400); // delay sikit bagi animasi nampak natural
+                }, 400); 
             }
         });
 
-        // Fungsi Pusing Surat (Flip)
         function flipLetter() {
             letterInner.classList.toggle('is-flipped');
         }
