@@ -160,7 +160,7 @@
     <div class="scene mb-12">
         <div id="envelope" class="wrapper">
             
-            <!-- STRUKTUR SAMPUL BIRU (BAHARU) -->
+            
             <div class="lid one"></div>
             <div class="lid two"></div>
             <div class="envelope-body"></div>
@@ -171,9 +171,18 @@
                     
                     <!-- MUKA DEPAN -->
                     <div class="letter-front">
-                        <h1 class="text-xl font-bold text-rose-600 mb-2">Terima Kasih!</h1>
+                        <h1 class="text-xl font-bold text-blue-600 mb-2">Kepada Shahida</h1>
                         <p class="text-gray-600 text-xs leading-relaxed mb-4">
-                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. 
+                        Salam persahabatan,<br> Tahniah atas lantikan pegawai di tempat baru.<br>
+                        Saya doakan Shahida dapat penempatan yang dekat, semoga terus cemerlang dalam kerjaya dan dipermudahkan segala urusan di sana nanti.<br><br>
+                        Saya ada pantun hehehe<br><br>
+                        Dari mana hendak ke mana,<br>
+                        Tinggi rumput dari padi, <br>
+                        Hari mana bulan mana,<br>
+                        Dapat ke kita jumpa lagi?<br><br>
+                        
+                        Ikhlas daripada,<br>
+                        Adam Rahim
                         </p>
                         <!---
                         <button onclick="flipLetter()" class="mt-auto px-4 py-1 bg-rose-100 text-rose-600 text-xs font-semibold rounded-full hover:bg-rose-200 transition">
@@ -200,7 +209,7 @@
     </div>
 
     
-    <button id="toggleBtn" class="px-8 py-3 bg-rose-500 text-white font-semibold rounded-full shadow-lg hover:bg-rose-600 transform hover:scale-105 transition duration-300 mt-10 z-20">
+    <button id="toggleBtn" class="px-8 py-3 bg-blue-500 text-white font-semibold rounded-full shadow-lg hover:bg-blue-600 transform hover:scale-105 transition duration-300 mt-10 z-20">
         Buka Sampul
     </button>
 
@@ -214,12 +223,12 @@
             
             if (envelope.classList.contains('is-open')) {
                 toggleBtn.textContent = 'Tutup Sampul';
-                toggleBtn.classList.replace('bg-rose-500', 'bg-gray-500');
-                toggleBtn.classList.replace('hover:bg-rose-600', 'hover:bg-gray-600');
+                toggleBtn.classList.replace('bg-blue-500', 'bg-gray-500');
+                toggleBtn.classList.replace('hover:bg-blue-600', 'hover:bg-gray-600');
             } else {
                 toggleBtn.textContent = 'Buka Sampul';
-                toggleBtn.classList.replace('bg-gray-500', 'bg-rose-500');
-                toggleBtn.classList.replace('hover:bg-gray-600', 'hover:bg-rose-600');
+                toggleBtn.classList.replace('bg-gray-500', 'bg-blue-500');
+                toggleBtn.classList.replace('hover:bg-gray-600', 'hover:bg-blue-600');
                 
                 setTimeout(() => {
                     letterInner.classList.remove('is-flipped');
